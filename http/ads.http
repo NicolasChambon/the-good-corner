@@ -6,14 +6,12 @@ POST http://localhost:3000/ads
 Content-Type: application/json
 
 {
-  "id": 3,
   "title": "Buy this product",
   "description": "This is a great product",
-  "owner": "John Doe",
+  "author": "John Doe",
   "price": 100,
-  "picture": "http://example.com/picture.jpg",
-  "location": "New York",
-  "createdAt": "2025-05-01T00:00:00.000Z"
+  "picture_url": "http://example.com/picture.jpg",
+  "city": "New York"
 }
 
 ###
@@ -24,14 +22,13 @@ Content-Type: application/json
 {
   "title": "Buy this product",
   "description": "This is a great product",
-  "owner": "Bob Mercer",
+  "author": "Bob Mercer",
   "price": 100,
-  "picture": "http://example.com/picture.jpg",
-  "location": "New York",
-  "createdAt": "2025-05-01T00:00:00.000Z"
+  "picture_url": "http://example.com/picture.jpg",
+  "city": "Cadolive"
 }
 
 ###
 
-DELETE http://localhost:3000/ads/3
+DELETE http://localhost:3000/ads/21
 
