@@ -8,45 +8,60 @@ CREATE TABLE AD (
     PRICE INT,
     PICTURE_URL TEXT,
     CITY TEXT,
-    CREATED_AT DATETIME DEFAULT CURRENT_TIMESTAMP
+    CREATED_AT DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CATEGORY_ID INTEGER,
+    FOREIGN KEY (CATEGORY_ID) REFERENCES CATEGORY(ID)
 );
 
-INSERT INTO AD (ID, TITLE, DESCRIPTION, AUTHOR, PRICE, PICTURE_URL, CITY, CREATED_AT) 
-    VALUES (1, 'Vélo rouge', 'Vélo en mauvais état mais pas cher', 'Toto Mobile', 100, 'https://via.placeholder.com/150', 'Lyon', '2021-01-01'),
-           (2, 'Vélo bleu', 'Vélo en bon état', 'Papou', 16, 'https://via.placeholder.com/150', 'Sallanches', '2021-01-02'),
-           (3, 'Vélo vert', 'Vélo en très bon état', 'Toto Mobile', 300, 'https://via.placeholder.com/150', 'Marseille', '2022-01-03'),
-           (4, 'Vélo jaune', 'Vélo neuf', 'Papou', 2, 'https://via.placeholder.com/150', 'Bordeaux', '2020-01-04'),
-           (5, 'Voiture orange', 'Voiture en très bon état', 'Bob Mercer', 500, 'https://via.placeholder.com/150', 'Limoges', '2021-01-05'),
-           (6, 'Vélo violet', 'Vélo en très bon état', 'Papou', 10, 'https://via.placeholder.com/150', 'Paris', '2023-01-06'),
-           (7, 'Vélo rose', 'Vélo en très bon état', 'Bob Mercer', 700, 'https://via.placeholder.com/150', 'Lyon', '2021-01-07'),
-           (8, 'Vélo noir', 'Vélo en très bon état', 'Papou', 800, 'https://via.placeholder.com/150', 'Paris', '2021-01-08'),
-           (9, 'Vélo blanc', 'Vélo en très bon état', 'Toto Mobile', 900, 'https://via.placeholder.com/150', 'Lille', '2021-01-09'),
-           (10, 'Vélo marron', 'Vélo en très bon état', 'Papou', 1000, 'https://via.placeholder.com/150', 'Lille', '2021-01-10'),
-           (11, 'Vélo gris', 'Vélo en très bon état', 'Bob Mercer', 1100, 'https://via.placeholder.com/150', 'Lyon', '2021-01-11'),
-           (12, 'Chaussure rouge', 'Chaussure en très bon état', 'Papou', 1200, 'https://via.placeholder.com/150', 'Paris', '2021-01-12'),
-           (13, 'Vélo bleu', 'Vélo en très bon état', 'Bob Mercer', 1300, 'https://via.placeholder.com/150', 'Marseille', '2021-10-01'),
-           (14, 'Vélo vert', 'Vélo en très bon état', 'Papou', 39, 'https://via.placeholder.com/150', 'Bordeaux', '2021-10-01'),
-           (15, 'Vélo jaune', 'Vélo en très bon état', 'Bob Mercer', 1500, 'https://via.placeholder.com/150', 'Paris', '2021-01-15'),
-           (16, 'Voiture orange', 'Voiture en très bon état', 'Papou', 23, 'https://via.placeholder.com/150', 'Marseille', '2021-01-16'),
-           (17, 'Vélo violet', 'Vélo en très bon état', 'Ouioui', 233, 'https://via.placeholder.com/150', 'Lyon', '2021-01-17'),
-           (18, 'Vélo rose', 'Vélo en très bon état', 'Papou', 1800, 'https://via.placeholder.com/150', 'Paris', '2021-01-18'),
-           (19, 'Vélo noir', 'Vélo en très bon état', 'Ouioui', 1900, 'https://via.placeholder.com/150', 'Lille', '2021-01-19'),
-           (20, 'Casserole blanc', 'Casserole en très bon état', 'Papou', 10, 'https://via.placeholder.com/150', 'Lille', '2023-10-01');
+CREATE TABLE CATEGORY (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    NAME TEXT
+);
 
-SELECT * FROM AD;
+CREATE TABLE TAG (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    NAME TEXT
+);
 
-SELECT * FROM AD WHERE CITY = 'Marseille';
+CREATE TABLE AD_TAG (
+    AD_ID INTEGER,
+    TAG_ID INTEGER,
+    FOREIGN KEY (AD_ID) REFERENCES AD(ID),
+    FOREIGN KEY (TAG_ID) REFERENCES TAG(ID)
+);
 
--- drop all ads with price > 40
-DELETE FROM AD WHERE PRICE > 40;
-SELECT * FROM AD;
+INSERT INTO AD_TAG (AD_ID, TAG_ID) VALUES (1, 1), (2, 2), (3, 1), (4, 2), (5, 1), (6, 2), (7, 1), (8, 2), (9, 1);
 
--- mettre à jour les annonces du 1er septembre avec un prix à 0
-UPDATE AD SET PRICE = 0 WHERE strftime('%m', CREATED_AT) = '09' AND strftime('%d', CREATED_AT) = '01';
-SELECT * FROM AD;
+INSERT INTO CATEGORY (ID, NAME) VALUES (1, 'Autre'), (2, 'Vehicule'), (3, 'Hifi');
+INSERT INTO TAG (ID, NAME) VALUES (1, 'Neuf'), (2, 'Soldé');
 
--- afficher la moyenne des prix des annonces de paris
-SELECT AVG(PRICE) FROM AD WHERE CITY = 'Paris';
+INSERT INTO AD (ID, TITLE, DESCRIPTION, AUTHOR, PRICE, PICTURE_URL, CITY, CREATED_AT, CATEGORY_ID)
+    VALUES
+    (1, 'Vélo', 'Vélo en bon état', 'Jean', 50, 'https://www.google.com', 'Paris', '2021-09-01', 1),
+    (2, 'Voiture', 'Voiture en bon état', 'Jean', 24, 'https://www.google.com', 'Marseille', '2021-09-01', 2),
+    (3, 'Télé', 'Télé en bon état', 'Jean', 100, 'https://www.google.com', 'Paris', '2021-09-01', 3),
+    (4, 'Vélo', 'Vélo en bon état', 'Jean', 50, 'https://www.google.com', 'Paris', '2021-09-02', 1),
+    (5, 'Voiture', 'Voiture en bon état', 'Jean', 65, 'https://www.google.com', 'Marseille', '2021-09-02', 2),
+    (6, 'Télé', 'Télé en bon état', 'Jean', 100, 'https://www.google.com', 'Paris', '2021-09-02', 3),
+    (7, 'Vélo', 'Vélo en bon état', 'Jean', 50, 'https://www.google.com', 'Paris', '2021-09-03', 1),
+    (8, 'Voiture', 'Voiture en bon état', 'Jean', 5000, 'https://www.google.com', 'Marseille', '2021-09-03', 2),
+    (9, 'Télé', 'Télé en bon état', 'Jean', 100, 'https://www.google.com', 'Paris', '2021-09-03', 3);
 
--- afficher la moyenne des prix des annonces par ville
-SELECT CITY, AVG(PRICE) FROM AD GROUP BY CITY;
+
+-- SELECT * FROM AD;
+
+-- SELECT * FROM AD WHERE CITY = 'Marseille';
+
+-- -- drop all ads with price > 40
+-- DELETE FROM AD WHERE PRICE > 40;
+-- SELECT * FROM AD;
+
+-- -- mettre à jour les annonces du 1er septembre avec un prix à 0
+-- UPDATE AD SET PRICE = 0 WHERE strftime('%m', CREATED_AT) = '09' AND strftime('%d', CREATED_AT) = '01';
+-- SELECT * FROM AD;
+
+-- -- afficher la moyenne des prix des annonces de paris
+-- SELECT AVG(PRICE) FROM AD WHERE CITY = 'Paris';
+
+-- -- afficher la moyenne des prix des annonces par ville
+-- SELECT CITY, AVG(PRICE) FROM AD GROUP BY CITY;
