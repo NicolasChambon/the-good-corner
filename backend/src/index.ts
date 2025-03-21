@@ -1,5 +1,7 @@
 import express from "express";
 import sqlite3 from "sqlite3";
+import "reflect-metadata";
+import dataSource from "./config/db";
 
 const db = new sqlite3.Database("../good_corner.sqlite");
 
@@ -100,6 +102,7 @@ app.delete("/ads/:id", (req, res) => {
   });
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Example app listening on port ${port}`);
+  await dataSource.initialize();
 });
