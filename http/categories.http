@@ -1,0 +1,24 @@
+GET http://localhost:3000/categories
+
+###
+
+POST http://localhost:3000/categories
+Content-Type: application/json
+
+{
+  "label": "Catégorie de fou furieux"
+}
+
+###
+
+PUT http://localhost:3000/categories/5
+Content-Type: application/json
+
+{
+  "label": "Catégorie géniale"
+}
+
+###
+
+DELETE http://localhost:3000/categories/5
+

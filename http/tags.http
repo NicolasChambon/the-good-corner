@@ -1,0 +1,24 @@
+GET http://localhost:3000/tags
+
+###
+
+POST http://localhost:3000/tags
+Content-Type: application/json
+
+{
+  "label": "Le tag qui tue"
+}
+
+###
+
+PUT http://localhost:3000/tags/5
+Content-Type: application/json
+
+{
+  "label": "Le tag en place"
+}
+
+###
+
+DELETE http://localhost:3000/tags/5
+
