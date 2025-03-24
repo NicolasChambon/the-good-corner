@@ -8,8 +8,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Category } from "./Category";
-import { Tag } from "./Tag";
+import { Category } from "@/entities/Category";
+import { Tag } from "@/entities/Tag";
 
 @Entity()
 export class Ad extends BaseEntity {

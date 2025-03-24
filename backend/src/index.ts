@@ -1,6 +1,6 @@
 import "reflect-metadata";
-import app from "./app";
-import dataSource from "./config/db";
+import app from "@/app";
+import dataSource from "@/config/db";
 
 const port = 3000;
 

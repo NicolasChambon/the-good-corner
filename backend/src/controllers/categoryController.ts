@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Category } from "../entities/Category";
+import { Category } from "@/entities/Category";
 
 export const getAll = async (
   _req: Request,

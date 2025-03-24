@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Tag } from "../entities/Tag";
+import { Tag } from "@/entities/Tag";
 
 export const getAll = async (
   _req: Request,
