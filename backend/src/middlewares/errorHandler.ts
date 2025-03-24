@@ -7,7 +7,7 @@ const errorHandler = (
   _next: NextFunction
 ) => {
   console.error(err.stack);
-  res.status(500).send({ error: err.message || "Something went wrong" });
+  res.status(500).send({ error: err.message || "Internal Server Error" });
 };
 
 export default errorHandler;

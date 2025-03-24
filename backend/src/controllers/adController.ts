@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Ad } from "../entities/Ad";
 
-export const getAll = async (_req: Request, res: Response) => {
+export const getAll = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const ads = await Ad.find({
       relations: {
@@ -11,12 +15,15 @@ export const getAll = async (_req: Request, res: Response) => {
     });
     res.send(ads);
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };
 
-export const create = async (req: Request, res: Response) => {
+export const create = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const ad = new Ad();
   ad.title = req.body.title;
   ad.description = req.body.description;
@@ -31,12 +38,15 @@ export const create = async (req: Request, res: Response) => {
     await ad.save();
     res.status(201).send("Ad created with success");
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };
 
-export const update = async (req: Request, res: Response) => {
+export const update = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const ad = await Ad.findOneBy({ id: parseInt(req.params.id) });
     if (!ad) {
@@ -56,12 +66,15 @@ export const update = async (req: Request, res: Response) => {
     await ad.save();
     res.status(204).send("Ad updated with success");
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };
 
-export const remove = async (req: Request, res: Response) => {
+export const remove = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const ad = await Ad.findOneBy({ id: parseInt(req.params.id) });
     if (!ad) {
@@ -72,7 +85,6 @@ export const remove = async (req: Request, res: Response) => {
     await ad.remove();
     res.send("Deleted with success");
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };

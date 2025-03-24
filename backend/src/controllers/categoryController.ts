@@ -1,17 +1,24 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { Category } from "../entities/Category";
 
-export const getAll = async (_req: Request, res: Response) => {
+export const getAll = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const categories = await Category.find();
     res.send(categories);
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };
 
-export const create = async (req: Request, res: Response) => {
+export const create = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const category = new Category();
   category.label = req.body.label;
 
@@ -19,12 +26,15 @@ export const create = async (req: Request, res: Response) => {
     await category.save();
     res.status(201).send("Category created with success");
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };
 
-export const update = async (req: Request, res: Response) => {
+export const update = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const category = await Category.findOneBy({ id: parseInt(req.params.id) });
     if (!category) {
@@ -37,12 +47,15 @@ export const update = async (req: Request, res: Response) => {
     await category.save();
     res.status(204).send("Category updated with success");
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };
 
-export const remove = async (req: Request, res: Response) => {
+export const remove = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const category = await Category.findOneBy({ id: parseInt(req.params.id) });
     if (!category) {
@@ -53,7 +66,6 @@ export const remove = async (req: Request, res: Response) => {
     await category.remove();
     res.status(204).send("Category removed with success");
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };

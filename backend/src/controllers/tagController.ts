@@ -1,17 +1,24 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { Tag } from "../entities/Tag";
 
-export const getAll = async (_req: Request, res: Response) => {
+export const getAll = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const tags = await Tag.find();
     res.send(tags);
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };
 
-export const create = async (req: Request, res: Response) => {
+export const create = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const tag = new Tag();
   tag.label = req.body.label;
 
@@ -19,12 +26,15 @@ export const create = async (req: Request, res: Response) => {
     await tag.save();
     res.status(201).send("Tag created with success");
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };
 
-export const update = async (req: Request, res: Response) => {
+export const update = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const tag = await Tag.findOneBy({ id: parseInt(req.params.id) });
     if (!tag) {
@@ -37,12 +47,15 @@ export const update = async (req: Request, res: Response) => {
     await tag.save();
     res.status(204).send("Tag updated with success");
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };
 
-export const remove = async (req: Request, res: Response) => {
+export const remove = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const tag = await Tag.findOneBy({ id: parseInt(req.params.id) });
     if (!tag) {
@@ -53,7 +66,6 @@ export const remove = async (req: Request, res: Response) => {
     await tag.remove();
     res.status(204).send("Tag removed with success");
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    next(err);
   }
 };
