@@ -1,6 +1,8 @@
-import { Ad } from "./RecentsAds";
+import { Ad } from "../../../interfaces/entities";
 
-const AdCard = ({ title, imgUrl, price, link }: Ad) => {
+type AdCardProps = Omit<Ad, "id">;
+
+const AdCard = ({ title, imgUrl, price, link }: AdCardProps) => {
   return (
     <div className="ad-card-container">
       <a className="ad-card-link" href={link}>
