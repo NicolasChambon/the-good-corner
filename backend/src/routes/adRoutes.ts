@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as adController from "../controllers/adController";
+import * as adController from "@/controllers/adController";
 
 const router = Router();
 

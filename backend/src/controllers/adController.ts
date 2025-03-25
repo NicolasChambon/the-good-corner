@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Ad } from "../entities/Ad";
+import { Ad } from "@/entities/Ad";
 
 export const getAll = async (
   _req: Request,
@@ -24,6 +24,8 @@ export const create = async (
   res: Response,
   next: NextFunction
 ) => {
+  // On peut mieux faire avec un constructeur cf:https://stackoverflow.com/questions/75096217/why-cant-i-change-the-entitys-constructor-in-typeorm
+  // On peut faire plus court avec l'assignation cf:https://discord.com/channels/1351484076091244596/1352602280804745296
   const ad = new Ad();
   ad.title = req.body.title;
   ad.description = req.body.description;
@@ -53,6 +55,9 @@ export const update = async (
       res.status(404).send("Ad not found");
       return;
     }
+
+    // Techniquement on peut faire un peu plus simple avec le nullish coalescing operator "??"
+    // si on change const ad à let on peux egalement simplifier l'assignation
 
     if (req.body.title) ad.title = req.body.title;
     if (req.body.description) ad.description = req.body.description;

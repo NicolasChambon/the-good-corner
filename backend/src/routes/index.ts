@@ -1,7 +1,7 @@
 import { Router } from "express";
-import adRoutes from "./adRoutes";
-import categoryRoutes from "./categoryRoutes";
-import tagRoutes from "./tagRoutes";
+import adRoutes from "@/routes/adRoutes";
+import categoryRoutes from "@/routes/categoryRoutes";
+import tagRoutes from "@/routes/tagRoutes";
 
 const router = Router();
 
