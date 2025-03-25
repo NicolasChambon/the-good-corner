@@ -1,15 +1,19 @@
-import Header from "./components/Header";
 import RecentsAds from "./components/RecentsAds";
+import { Route, Routes } from "react-router";
+import Layout from "./pages/Layout";
+import About from "./pages/About";
+import AdDetails from "./pages/AdDetails";
 import "./App.css";
 
 function App() {
   return (
-    <>
-      <Header />
-      <main className="main-content">
-        <RecentsAds />
-      </main>
-    </>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<RecentsAds />} />
+        <Route path="ad/:id" element={<AdDetails />} />
+        <Route path="about" element={<About />} />
+      </Route>
+    </Routes>
   );
 }
 

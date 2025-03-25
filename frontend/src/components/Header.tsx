@@ -1,12 +1,14 @@
+import { Link } from "react-router";
+
 const Header = () => {
   return (
     <header className="header">
       <div className="main-menu">
         <h1>
-          <a href="/" className="button logo link-button">
+          <Link to="/" className="button logo link-button">
             <span className="mobile-short-label">TGC</span>
             <span className="desktop-long-label">THE GOOD CORNER</span>
-          </a>
+          </Link>
         </h1>
         <form className="text-field-with-button">
           <input className="text-field main-search-field" type="search" />
@@ -26,63 +28,63 @@ const Header = () => {
             </svg>
           </button>
         </form>
-        <a href="/post-ad" className="button link-button">
+        <Link to="/post-ad" className="button link-button">
           <span className="mobile-short-label">Publier</span>
           <span className="desktop-long-label">Publier une annonce</span>
-        </a>
+        </Link>
       </div>
       <nav className="categories-navigation">
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Ameublement
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Électroménager
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Photographie
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Informatique
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Téléphonie{" "}
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Vélos
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Véhicules
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Sport
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Habillement
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Bébé
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Outillage
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Services{" "}
-        </a>{" "}
+        </Link>{" "}
         •
-        <a href="" className="category-navigation-link">
+        <Link to="" className="category-navigation-link">
           Vacances
-        </a>
+        </Link>
       </nav>
     </header>
   );
