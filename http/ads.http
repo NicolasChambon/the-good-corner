@@ -10,7 +10,7 @@ Content-Type: application/json
   "description": "This is a great product",
   "author": "John Doe",
   "price": 100,
-  "picture_url": "http://example.com/picture.jpg",
+  "pictureUrl": "http://example.com/picture.jpg",
   "city": "New York",
   "category": 1,
   "tags": [
@@ -42,5 +42,5 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3000/ads/25
+DELETE http://localhost:3000/ads/34
 

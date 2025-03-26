@@ -28,7 +28,7 @@ const Header = () => {
             </svg>
           </button>
         </form>
-        <Link to="/post-ad" className="button link-button">
+        <Link to="/ad/new" className="button link-button">
           <span className="mobile-short-label">Publier</span>
           <span className="desktop-long-label">Publier une annonce</span>
         </Link>
