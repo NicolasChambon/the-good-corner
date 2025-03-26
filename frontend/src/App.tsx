@@ -4,7 +4,7 @@ import Layout from "./pages/Layout";
 import About from "./pages/About";
 import AdDetails from "./pages/AdDetails";
 import "./App.css";
-import NewAdForm from "./pages/NewAdForm";
+import NewAdForm from "./pages/NewAdForm/NewAdForm";
 
 function App() {
   return (

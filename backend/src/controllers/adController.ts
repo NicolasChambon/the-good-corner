@@ -2,12 +2,22 @@ import { NextFunction, Request, Response } from "express";
 import { Ad } from "../entities/Ad";
 
 export const getAll = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  console.log("req", req);
+  const categoryId = req.query.category;
+
+  let where = {};
+  if (categoryId) {
+    const idInt = parseInt(categoryId as string);
+    where = { category: { id: idInt } };
+  }
+
   try {
     const ads = await Ad.find({
+      where,
       relations: {
         category: true,
         tags: true,
