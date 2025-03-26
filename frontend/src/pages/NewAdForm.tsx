@@ -1,24 +1,32 @@
 import { useEffect, useState } from "react";
-import { Category } from "../../../interfaces/entities";
+import { Category } from "../../interfaces/entities";
 import axios from "axios";
 
 const NewAdForm = () => {
   const [categories, setCategories] = useState<Category[]>([]);
 
   const fetchCategories = async () => {
-    const response = await axios.get<Category[]>(
-      "http://localhost:3000/categories"
-    );
-    setCategories(response.data);
+    try {
+      const response = await axios.get<Category[]>(
+        `${import.meta.env.VITE_API_URL}/categories`
+      );
+      setCategories(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = e.target;
     const data = new FormData(formData as HTMLFormElement);
     const formJson = Object.fromEntries(data.entries());
-    await axios.post("http://localhost:3000/ads", formJson);
-    console.log(formJson);
+
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/ads`, formJson);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {

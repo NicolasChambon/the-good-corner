@@ -1,5 +1,5 @@
 import AdCard from "./AdCard";
-import { Ad } from "../../../interfaces/entities";
+import { Ad } from "../../interfaces/entities";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -8,8 +8,12 @@ const RecentsAds = () => {
   const [ads, setAds] = useState<Ad[]>([]);
 
   const fetchAds = async () => {
-    const result = await axios.get("http://localhost:3000/ads");
-    setAds(result.data);
+    try {
+      const result = await axios.get(`${import.meta.env.VITE_API_URL}/ads`);
+      setAds(result.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
