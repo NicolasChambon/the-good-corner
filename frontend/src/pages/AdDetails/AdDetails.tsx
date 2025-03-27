@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
-interface Ad {
+interface AdDetailsType {
   id: number;
   title: string;
   description: string;
@@ -10,7 +10,7 @@ interface Ad {
   price: number;
   pictureUrl: string;
   city: string;
-  createdAt: string;
+  createdAt: Date;
   category: {
     id: number;
     label: string;
@@ -23,7 +23,7 @@ interface Ad {
 
 const AdDetails = () => {
   const { id } = useParams();
-  const [adData, setAdData] = useState<Ad | null>(null);
+  const [adData, setAdData] = useState<AdDetailsType | null>(null);
 
   const fetchAd = async () => {
     try {
@@ -40,27 +40,38 @@ const AdDetails = () => {
     fetchAd();
   }, [id]);
 
+  if (!adData) {
+    return <p>Loading...</p>;
+  }
   return (
     <>
-      <h2 className="ad-details-title">{adData?.title}</h2>
+      <h2 className="ad-details-title">{adData.title}</h2>
       <section className="ad-details">
         <div className="ad-details-image-container">
           <img
             className="ad-details-image"
             src={
-              adData?.pictureUrl ||
+              adData.pictureUrl ||
               "https://via.placeholder.com/300x200?text=No+Image"
             }
-            alt={adData?.title}
+            alt={adData.title}
           />
         </div>
         <div className="ad-details-info">
-          <div className="ad-details-price">{adData?.price}€</div>
-          <div className="ad-details-description">{adData?.description}</div>
+          <div className="ad-details-price">{adData.price}€</div>
+          <div className="ad-details-description">{adData.description}</div>
+          <div className="ad-tags">
+            {adData.tags.map((tag) => (
+              <div key={tag.id} className="tag">
+                {tag.label}
+              </div>
+            ))}
+          </div>
           <hr className="separator" />
           <div className="ad-details-owner">
-            Annoncée publiée par <b>{adData?.author}</b> le{" "}
-            {new Date(adData?.createdAt as string).toLocaleDateString()}.
+            Annoncée publiée par <b>{adData.author}</b> le{" "}
+            {new Date(adData.createdAt).toLocaleDateString()} à{" "}
+            {new Date(adData.createdAt).toLocaleTimeString()}
           </div>
           <a
             href="mailto:serge@serge.com"

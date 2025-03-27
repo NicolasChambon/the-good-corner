@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Category } from "../../../interfaces/entities";
+import { Tag } from "../../../interfaces/entities";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -13,10 +14,23 @@ type Inputs = {
   pictureUrl: string;
   city: string;
   category: number;
+  tags: number[];
 };
 
 const NewAdForm = () => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+
+  const fetchTags = async () => {
+    try {
+      const response = await axios.get<Tag[]>(
+        `${import.meta.env.VITE_API_URL}/tags`
+      );
+      setTags(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const fetchCategories = async () => {
     try {
@@ -31,6 +45,7 @@ const NewAdForm = () => {
 
   useEffect(() => {
     fetchCategories();
+    fetchTags();
   }, []);
 
   const {
@@ -41,10 +56,16 @@ const NewAdForm = () => {
 
   const onSubmit = async (data: Inputs) => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/ads`, data);
+      const dataWithTags = {
+        ...data,
+        tags: data.tags.map((tagId) => ({ id: tagId })),
+      };
+
+      await axios.post(`${import.meta.env.VITE_API_URL}/ads`, dataWithTags);
       toast.success("Annonce créée avec succès!");
     } catch (error) {
       console.error(error);
+      toast.error("Une erreur est survenue lors de la création de l'annonce");
     }
   };
 
@@ -107,6 +128,17 @@ const NewAdForm = () => {
           <option value="">Choisissez une catégorie</option>
         </select>
         {errors.category && <span>This field is required</span>}
+
+        {
+          // une annonce peut avoir plusieurs tags on va les représenter sous forme de checkbox
+        }
+        {tags.map((tag) => (
+          <label key={tag.id}>
+            <input type="checkbox" value={tag.id} {...register(`tags`)} />
+            {tag.label}
+          </label>
+        ))}
+
         <button className="button" type="submit">
           Submit
         </button>
