@@ -14,7 +14,7 @@ type Inputs = {
   pictureUrl: string;
   city: string;
   category: number;
-  tags: number[];
+  tags: string[];
 };
 
 const NewAdForm = () => {
@@ -129,9 +129,6 @@ const NewAdForm = () => {
         </select>
         {errors.category && <span>This field is required</span>}
 
-        {
-          // une annonce peut avoir plusieurs tags on va les représenter sous forme de checkbox
-        }
         {tags.map((tag) => (
           <label key={tag.id}>
             <input type="checkbox" value={tag.id} {...register(`tags`)} />

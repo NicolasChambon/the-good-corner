@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 interface AdDetailsType {
   id: number;
@@ -24,6 +25,7 @@ interface AdDetailsType {
 const AdDetails = () => {
   const { id } = useParams();
   const [adData, setAdData] = useState<AdDetailsType | null>(null);
+  const navigate = useNavigate();
 
   const fetchAd = async () => {
     try {
@@ -40,6 +42,17 @@ const AdDetails = () => {
     fetchAd();
   }, [id]);
 
+  const deleteAd = async (id: number) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/ads/${id}`);
+      toast.success("Annonce supprimée avec succès!");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      toast.error("Erreur lors de la suppression de l'annonce");
+    }
+  };
+
   if (!adData) {
     return <p>Loading...</p>;
   }
@@ -50,10 +63,7 @@ const AdDetails = () => {
         <div className="ad-details-image-container">
           <img
             className="ad-details-image"
-            src={
-              adData.pictureUrl ||
-              "https://via.placeholder.com/300x200?text=No+Image"
-            }
+            src={adData.pictureUrl}
             alt={adData.title}
           />
         </div>
@@ -92,6 +102,9 @@ const AdDetails = () => {
             </svg>
             Envoyer un email
           </a>
+          <button className="button" onClick={() => deleteAd(adData.id)}>
+            Supprimer l'annonce
+          </button>
         </div>
       </section>
     </>
