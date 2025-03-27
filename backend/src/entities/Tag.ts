@@ -12,7 +12,7 @@ export class Tag extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ unique: true })
   label!: string;
 
   @ManyToMany(() => Ad, (ad) => ad.tags)

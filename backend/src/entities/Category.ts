@@ -12,7 +12,7 @@ export class Category extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ unique: true })
   label!: string;
 
   @OneToMany(() => Ad, (ad) => ad.category)

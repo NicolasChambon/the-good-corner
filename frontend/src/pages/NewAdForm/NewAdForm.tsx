@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Category } from "../../../interfaces/entities";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "./NewAdForm.scss";
 
 type Inputs = {
@@ -42,7 +42,7 @@ const NewAdForm = () => {
   const onSubmit = async (data: Inputs) => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/ads`, data);
-      toast(() => <div>Annonce créée avec succès!</div>);
+      toast.success("Annonce créée avec succès!");
     } catch (error) {
       console.error(error);
     }
@@ -110,7 +110,6 @@ const NewAdForm = () => {
         <button className="button" type="submit">
           Submit
         </button>
-        <ToastContainer />
       </form>
     </div>
   );

@@ -8,13 +8,11 @@ export const getAll = async (
 ) => {
   const categoryId = req.query.category;
   let where = {};
-
   if (categoryId !== "null") {
     where = {
       category: { id: parseInt(categoryId as string) },
     };
   }
-
   try {
     const ads = await Ad.find({
       where,
@@ -24,6 +22,29 @@ export const getAll = async (
       },
     });
     res.send(ads);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getOne = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const ad = await Ad.findOne({
+      where: { id: parseInt(req.params.id) },
+      relations: {
+        category: true,
+        tags: true,
+      },
+    });
+    if (!ad) {
+      res.status(404).send("Ad not found");
+      return;
+    }
+    res.send(ad);
   } catch (err) {
     next(err);
   }

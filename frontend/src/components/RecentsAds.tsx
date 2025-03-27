@@ -38,7 +38,7 @@ const RecentsAds = () => {
               title={ad.title}
               pictureUrl={ad.pictureUrl}
               price={ad.price}
-              link={ad.link}
+              link={`${import.meta.env.VITE_FRONT_URL}/ad/${ad.id}`}
             />
             <button
               className="button"
