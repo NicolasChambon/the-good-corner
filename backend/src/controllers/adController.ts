@@ -9,68 +9,25 @@ export const getAll = async (
   const categoryId = req.query.category;
   let where = {};
 
-  if (categoryId === "null") {
-    console.log("categoryId is null");
-    try {
-      const ads = await Ad.find({
-        relations: {
-          category: true,
-          tags: true,
-        },
-      });
-      res.send(ads);
-    } catch (err) {
-      next(err);
-    }
-  } else {
-    console.log("categoryId is not null");
-    const idInt = parseInt(categoryId as string);
-    where = { category: { id: idInt } };
-    try {
-      const ads = await Ad.find({
-        where,
-        relations: {
-          category: true,
-          tags: true,
-        },
-      });
-      res.send(ads);
-    } catch (err) {
-      next(err);
-    }
+  if (categoryId !== "null") {
+    where = {
+      category: { id: parseInt(categoryId as string) },
+    };
+  }
+
+  try {
+    const ads = await Ad.find({
+      where,
+      relations: {
+        category: true,
+        tags: true,
+      },
+    });
+    res.send(ads);
+  } catch (err) {
+    next(err);
   }
 };
-
-//   if (categoryId && categoryId !== "") {
-//     const idInt = parseInt(categoryId as string);
-//     where = { category: { id: idInt } };
-
-//     try {
-//       const ads = await Ad.find({
-//         where,
-//         relations: {
-//           category: true,
-//           tags: true,
-//         },
-//       });
-//       res.send(ads);
-//     } catch (err) {
-//       next(err);
-//     }
-//   } else {
-//     try {
-//       const ads = await Ad.find({
-//         relations: {
-//           category: true,
-//           tags: true,
-//         },
-//       });
-//       res.send(ads);
-//     } catch (err) {
-//       next(err);
-//     }
-//   }
-// };
 
 export const create = async (
   req: Request,
