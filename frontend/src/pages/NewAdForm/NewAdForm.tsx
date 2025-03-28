@@ -13,13 +13,30 @@ type Inputs = {
   price: number;
   pictureUrl: string;
   city: string;
-  category: number;
-  tags: string[];
+  category: Category;
+  tags: Tag[];
 };
 
-const NewAdForm = () => {
+const NewAdForm = ({ type }: { type: "new" | "edit" }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
+  const [currentAd, setCurrentAd] = useState<Inputs | null>(null);
+
+  let adId: string | undefined;
+  if (type === "edit") {
+    adId = window.location.pathname.split("/")[2];
+  }
+
+  const fetchCurrentAd = async (id: number) => {
+    try {
+      const response = await axios.get<Inputs>(
+        `${import.meta.env.VITE_API_URL}/ads/${id}`
+      );
+      setCurrentAd(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const fetchTags = async () => {
     try {
@@ -46,20 +63,27 @@ const NewAdForm = () => {
   useEffect(() => {
     fetchCategories();
     fetchTags();
+    if (type === "edit") {
+      fetchCurrentAd(Number(adId));
+    }
   }, []);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const { register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit = async (data: Inputs) => {
+    const dataWithTags = {
+      ...data,
+      tags: data.tags.map((tagId) => ({ id: tagId })),
+    };
     try {
-      const dataWithTags = {
-        ...data,
-        tags: data.tags.map((tagId) => ({ id: tagId })),
-      };
+      if (type === "edit") {
+        await axios.put(
+          `${import.meta.env.VITE_API_URL}/ads/${adId}`,
+          dataWithTags
+        );
+        toast.success("Annonce modifiée avec succès!");
+        return;
+      }
 
       await axios.post(`${import.meta.env.VITE_API_URL}/ads`, dataWithTags);
       toast.success("Annonce créée avec succès!");
@@ -71,67 +95,83 @@ const NewAdForm = () => {
 
   return (
     <div className="NewAdForm">
-      <h2>Création d'une nouvelle annonce</h2>
+      <h2>
+        {type && type === "edit"
+          ? `Modification de l'annonce ${adId}`
+          : "Création d'une nouvelle annonce"}
+      </h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
+          defaultValue={currentAd?.title}
           className="text-field"
           type="text"
           placeholder="Titre de l'anonce"
-          {...register("title", { required: true })}
+          {...register("title")}
         />
-        {errors.title && <span>This field is required</span>}
         <input
+          defaultValue={currentAd?.description}
           className="text-field"
           type="text"
           placeholder="Description"
-          {...register("description", { required: true })}
+          {...register("description")}
         />
-        {errors.description && <span>This field is required</span>}
         <input
+          defaultValue={currentAd?.author}
           className="text-field"
           type="text"
           placeholder="Auteur"
-          {...register("author", { required: true })}
+          {...register("author")}
         />
-        {errors.author && <span>This field is required</span>}
         <input
+          defaultValue={currentAd?.price}
           className="text-field"
           type="number"
           placeholder="Prix"
-          {...register("price", { required: true })}
+          {...register("price")}
         />
-        {errors.price && <span>This field is required</span>}
         <input
+          defaultValue={currentAd?.pictureUrl}
           className="text-field"
           type="text"
           placeholder="Lien vers une image"
-          {...register("pictureUrl", { required: true })}
+          {...register("pictureUrl")}
         />
-        {errors.pictureUrl && <span>This field is required</span>}
         <input
+          defaultValue={currentAd?.city}
           className="text-field"
           type="text"
           placeholder="Ville"
-          {...register("city", { required: true })}
+          {...register("city")}
         />
-        {errors.city && <span>This field is required</span>}
-        <select
-          {...register("category", { required: true })}
-          className="text-field"
-        >
+
+        <select {...register("category")} className="text-field">
           {categories.map((category) => (
-            <option key={category.id} value={category.id}>
+            <option
+              key={category.id}
+              value={category.id}
+              selected={currentAd?.category.id === category.id}
+            >
               {category.label}
             </option>
           ))}
-          <option value="">Choisissez une catégorie</option>
+          {type === "new" && (
+            <option value="" selected>
+              Choisissez une catégorie
+            </option>
+          )}
         </select>
-        {errors.category && <span>This field is required</span>}
 
         {tags.map((tag) => (
           <label key={tag.id}>
-            <input type="checkbox" value={tag.id} {...register(`tags`)} />
+            <input
+              type="checkbox"
+              value={tag.id}
+              defaultChecked={currentAd?.tags
+                .map((tag) => tag.id)
+                .includes(tag.id)}
+              {...register(`tags`)}
+            />
             {tag.label}
           </label>
         ))}

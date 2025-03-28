@@ -102,6 +102,12 @@ const AdDetails = () => {
             </svg>
             Envoyer un email
           </a>
+          <button
+            className="button"
+            onClick={() => navigate(`/ad/${adData.id}/edit`)}
+          >
+            Modifier l'annonce
+          </button>
           <button className="button" onClick={() => deleteAd(adData.id)}>
             Supprimer l'annonce
           </button>

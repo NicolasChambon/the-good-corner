@@ -17,9 +17,10 @@ function App() {
           <Route index element={<RecentsAds />} />
           <Route path="ad/:id" element={<AdDetails />} />
           <Route path="about" element={<About />} />
-          <Route path="ad/new" element={<NewAdForm />} />
+          <Route path="ad/new" element={<NewAdForm type="new" />} />
           <Route path="category" element={<CategoryBo />} />
           <Route path="search" element={<SearchResult />} />
+          <Route path="ad/:id/edit" element={<NewAdForm type="edit" />} />
         </Route>
       </Routes>
       <ToastContainer />
