@@ -48,6 +48,7 @@ export class Ad extends BaseEntity {
   createdAt!: Date;
 
   @ManyToOne(() => Category, (category) => category.ads, { nullable: false })
+  @Field(() => Category)
   category!: Category;
 
   @ManyToMany(() => Tag)
@@ -56,5 +57,6 @@ export class Ad extends BaseEntity {
     joinColumn: { name: "adId", referencedColumnName: "id" },
     inverseJoinColumn: { name: "tagId", referencedColumnName: "id" },
   })
+  @Field(() => [Tag])
   tags!: Tag[];
 }
