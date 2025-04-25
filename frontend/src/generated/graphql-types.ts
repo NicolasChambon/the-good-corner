@@ -130,7 +130,10 @@ export type UpdateAdInput = {
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type GetAllAdsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllAdsQueryVariables = Exact<{
+  category?: InputMaybe<Scalars['Float']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
 export type GetAllAdsQuery = { __typename?: 'Query', getAllAds: Array<{ __typename?: 'Ad', id: string, title: string, price: number, pictureUrl: string }> };
@@ -142,8 +145,8 @@ export type GetAllCategoriesQuery = { __typename?: 'Query', getAllCategories: Ar
 
 
 export const GetAllAdsDocument = gql`
-    query GetAllAds {
-  getAllAds {
+    query GetAllAds($category: Float, $search: String) {
+  getAllAds(category: $category, search: $search) {
     id
     title
     price
@@ -164,6 +167,8 @@ export const GetAllAdsDocument = gql`
  * @example
  * const { data, loading, error } = useGetAllAdsQuery({
  *   variables: {
+ *      category: // value for 'category'
+ *      search: // value for 'search'
  *   },
  * });
  */

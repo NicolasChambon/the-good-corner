@@ -29,3 +29,9 @@ function App() {
 }
 
 export default App;
+
+// TODO :  faire le ménage sur le back
+// TODO :  virer les commentaires
+// TODO :  checker les dépendances inutilisées
+// TODO :  dynamiser les urls avec des variables d'environnement
+// TODO :  checker les doublons d'interfaces, types, etc

@@ -1,30 +1,20 @@
 import { useGetAllAdsQuery } from "../generated/graphql-types";
 import AdCard from "./AdCard";
 import { useState } from "react";
+import { useSearchParams } from "react-router";
 
 const RecentsAds = () => {
-  // const [searchParams] = useSearchParams();
-  // const categoryId = searchParams.get("category");
+  const [searchParams] = useSearchParams();
+  const categoryId = searchParams.get("category");
 
   const [total, setTotal] = useState(0);
-  // const [ads, setAds] = useState<Ad[]>([]);
 
-  // const fetchAds = async () => {
-  //   try {
-  //     const result = await axios.get(
-  //       `${import.meta.env.VITE_API_URL}/ads?category=${categoryId}`
-  //     );
-  //     setAds(result.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchAds();
-  // }, [categoryId]);
-
-  const { data, loading, error } = useGetAllAdsQuery();
+  const { data, loading, error } = useGetAllAdsQuery({
+    variables: {
+      category: categoryId ? parseInt(categoryId) : undefined,
+      search: undefined,
+    },
+  });
 
   if (loading) return <p>Ça charge !</p>;
   if (error) return <p>Oups ! On a tout cassé</p>;

@@ -1,38 +1,30 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router";
-import { Ad } from "../../../interfaces/entities";
 import AdCard from "../../components/AdCard";
+import { useGetAllAdsQuery } from "../../generated/graphql-types";
 
 const SearchResult = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("query");
 
   const [total, setTotal] = useState(0);
-  const [ads, setAds] = useState<Ad[]>([]);
 
-  const fetchAds = async () => {
-    try {
-      const result = await axios.get(
-        `${import.meta.env.VITE_API_URL}/ads?search=${query}`
-      );
-      setAds(result.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { data, loading, error } = useGetAllAdsQuery({
+    variables: {
+      category: undefined,
+      search: query ? query : undefined,
+    },
+  });
 
-  useEffect(() => {
-    fetchAds();
-  }, [query]);
-
+  if (loading) return <p>Ça charge !</p>;
+  if (error) return <p>Oups ! On a tout cassé</p>;
   return (
     <>
       <h2>Résultat de recherche</h2>
       <h3>Total: {total} €</h3>
 
       <section className="recent-ads">
-        {ads.map((ad) => (
+        {data?.getAllAds.map((ad) => (
           <div key={ad.id}>
             <AdCard
               title={ad.title}

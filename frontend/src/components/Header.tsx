@@ -1,28 +1,15 @@
 import { Link } from "react-router";
-import { Category } from "../../interfaces/entities";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
+import { useGetAllCategoriesQuery } from "../generated/graphql-types";
 
 const Header = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
   const [searchInput, setSearchInput] = useState("");
+  const { data, loading, error } = useGetAllCategoriesQuery();
 
-  // useGetAllCategoriesQuery({
+  const categories = data?.getAllCategories;
 
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get<Category[]>(
-        `${import.meta.env.VITE_API_URL}/categories`
-      );
-      setCategories(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading categories</p>;
 
   return (
     <header className="header">
@@ -69,7 +56,7 @@ const Header = () => {
         </Link>
       </div>
       <nav className="categories-navigation">
-        {categories.map((category) => (
+        {categories?.map((category) => (
           <Link
             to={`/?category=${category.id}`}
             key={category.id}
