@@ -24,6 +24,7 @@ const startServer = async () => {
     const { url } = await apolloServer.listen({
       port,
     });
+
     console.log(`🚀 Server ready at: ${url}`);
   } catch (err) {
     console.error("Failed to start server:", err);

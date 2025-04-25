@@ -110,3 +110,4 @@ INSERT INTO ad_tag (adId, tagId)
 SELECT * FROM ad;
 SELECT * FROM category;
 SELECT * FROM tag;
+SELECT * FROM ad_tag;

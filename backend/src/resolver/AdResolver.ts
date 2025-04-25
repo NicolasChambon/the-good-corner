@@ -30,6 +30,33 @@ class CreateAdInput {
   tags!: number[];
 }
 
+@InputType()
+class UpdateAdInput {
+  @Field({ nullable: true })
+  title?: string;
+
+  @Field({ nullable: true })
+  description?: string;
+
+  @Field({ nullable: true })
+  author?: string;
+
+  @Field({ nullable: true })
+  price?: number;
+
+  @Field({ nullable: true })
+  pictureUrl?: string;
+
+  @Field({ nullable: true })
+  city?: string;
+
+  @Field(() => ID, { nullable: true })
+  category?: number;
+
+  @Field(() => [ID], { nullable: true })
+  tags?: number[];
+}
+
 @Resolver(Ad)
 export class AdResolver {
   @Query(() => [Ad])
@@ -97,34 +124,27 @@ export class AdResolver {
     }
   }
 
-  // @Mutation(() => ID)
-  // async updateAd(
-  //   @Arg("id") id: number,
-  //   @Arg("data") data: Partial<CreateAdInput>
-  // ) {
-  //   try {
-  //     const ad = await Ad.findOneBy({ id });
+  @Mutation(() => ID)
+  async updateAd(@Arg("id") id: number, @Arg("data") data: UpdateAdInput) {
+    try {
+      let ad = await Ad.findOneBy({ id });
 
-  //     if (!ad) {
-  //       throw new Error("Ad not found");
-  //     }
+      if (!ad) {
+        throw new Error("Ad not found");
+      }
 
-  //     if (data.title) ad.title = data.title;
-  //     if (data.description) ad.description = data.description;
-  //     if (data.author) ad.author = data.author;
-  //     if (data.price) ad.price = data.price;
-  //     if (data.pictureUrl) ad.pictureUrl = data.pictureUrl;
-  //     if (data.city) ad.city = data.city;
-  //     if (data.tags) ad.tags = data.tags.map((tagId) => ({ id: tagId }));
-  //     if (data.category) ad.category = { id: data.category };
+      ad = Object.assign(ad, data, {
+        category: { id: data.category },
+        tags: data.tags?.map((tagId) => ({ id: tagId })),
+      });
 
-  //     await ad.save();
+      await ad.save();
 
-  //     return ad.id;
-  //   } catch (err) {
-  //     throw new Error(`Error updating ad: ${err}`);
-  //   }
-  // }
+      return ad.id;
+    } catch (err) {
+      throw new Error(`Error updating ad: ${err}`);
+    }
+  }
 
   @Mutation(() => ID)
   async deleteAd(@Arg("id") id: number) {

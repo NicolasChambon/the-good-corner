@@ -7,6 +7,8 @@ const Header = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchInput, setSearchInput] = useState("");
 
+  // useGetAllCategoriesQuery({
+
   const fetchCategories = async () => {
     try {
       const response = await axios.get<Category[]>(
