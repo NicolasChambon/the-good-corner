@@ -10,13 +10,13 @@ import {
 } from "typeorm";
 import { Category } from "./Category";
 import { Tag } from "./Tag";
-import { Field, ObjectType } from "type-graphql";
+import { Field, ID, ObjectType } from "type-graphql";
 
 @Entity()
 @ObjectType()
 export class Ad extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field()
+  @Field(() => ID)
   id!: number;
 
   @Column()
@@ -51,7 +51,7 @@ export class Ad extends BaseEntity {
   @Field(() => Category)
   category!: Category;
 
-  @ManyToMany(() => Tag)
+  @ManyToMany(() => Tag, (tag) => tag.ads)
   @JoinTable({
     name: "ad_tag",
     joinColumn: { name: "adId", referencedColumnName: "id" },

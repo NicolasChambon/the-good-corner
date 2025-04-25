@@ -7,7 +7,7 @@ const dataSource = new DataSource({
   type: "sqlite",
   database: "db/good_corner.sqlite",
   entities: [Ad, Category, Tag],
-  synchronize: false,
+  synchronize: true,
   logging: ["error", "query"],
 });
 

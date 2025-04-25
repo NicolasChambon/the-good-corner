@@ -2,6 +2,8 @@ import "reflect-metadata";
 import dataSource from "./config/db";
 import { ApolloServer } from "apollo-server";
 import { AdResolver } from "./resolver/AdResolver";
+import { CategoryResolver } from "./resolver/CategoryResolver";
+import { TagResolver } from "./resolver/TagResolver";
 import { buildSchema } from "type-graphql";
 
 const port = 4000;
@@ -12,7 +14,7 @@ const startServer = async () => {
     console.info("Database connection established");
 
     const schema = await buildSchema({
-      resolvers: [AdResolver],
+      resolvers: [AdResolver, CategoryResolver, TagResolver],
     });
 
     const apolloServer = new ApolloServer({

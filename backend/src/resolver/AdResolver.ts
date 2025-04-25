@@ -2,8 +2,6 @@ import { Query, Resolver, Arg, Mutation } from "type-graphql";
 import { Ad } from "../entities/Ad";
 import { FindOperator, Like } from "typeorm";
 import { Field, InputType, ID } from "type-graphql";
-import { Category } from "../entities/Category";
-import { Tag } from "../entities/Tag";
 
 @InputType()
 class CreateAdInput {
@@ -26,10 +24,10 @@ class CreateAdInput {
   city!: string;
 
   @Field(() => ID)
-  category!: Category;
+  category!: number;
 
   @Field(() => [ID])
-  tags!: Tag[];
+  tags!: number[];
 }
 
 @Resolver(Ad)
@@ -83,23 +81,64 @@ export class AdResolver {
     }
   }
 
-  @Mutation(() => Ad)
-  async createAd(@Arg("data") data: CreateAdInput): Promise<Ad> {
-    const ad = new Ad();
-    ad.title = data.title;
-    ad.description = data.description;
-    ad.author = data.author;
-    ad.price = data.price;
-    ad.pictureUrl = data.pictureUrl;
-    ad.city = data.city;
-    ad.category = data.category;
-    ad.tags = data.tags;
+  @Mutation(() => ID)
+  async createAd(@Arg("data") data: CreateAdInput) {
+    const ad = Ad.create({
+      ...data,
+      category: { id: data.category },
+      tags: data.tags.map((tagId) => ({ id: tagId })),
+    });
 
     try {
       await ad.save();
-      return ad;
+      return ad.id;
     } catch (err) {
       throw new Error(`Error creating ad: ${err}`);
+    }
+  }
+
+  // @Mutation(() => ID)
+  // async updateAd(
+  //   @Arg("id") id: number,
+  //   @Arg("data") data: Partial<CreateAdInput>
+  // ) {
+  //   try {
+  //     const ad = await Ad.findOneBy({ id });
+
+  //     if (!ad) {
+  //       throw new Error("Ad not found");
+  //     }
+
+  //     if (data.title) ad.title = data.title;
+  //     if (data.description) ad.description = data.description;
+  //     if (data.author) ad.author = data.author;
+  //     if (data.price) ad.price = data.price;
+  //     if (data.pictureUrl) ad.pictureUrl = data.pictureUrl;
+  //     if (data.city) ad.city = data.city;
+  //     if (data.tags) ad.tags = data.tags.map((tagId) => ({ id: tagId }));
+  //     if (data.category) ad.category = { id: data.category };
+
+  //     await ad.save();
+
+  //     return ad.id;
+  //   } catch (err) {
+  //     throw new Error(`Error updating ad: ${err}`);
+  //   }
+  // }
+
+  @Mutation(() => ID)
+  async deleteAd(@Arg("id") id: number) {
+    try {
+      const ad = await Ad.findOneBy({ id });
+
+      if (!ad) {
+        throw new Error("Ad not found");
+      }
+
+      await ad.remove();
+      return ad.id;
+    } catch (err) {
+      throw new Error(`Error deleting ad: ${err}`);
     }
   }
 }
