@@ -1,50 +1,43 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { toast } from "react-toastify";
-
-interface AdDetailsType {
-  id: number;
-  title: string;
-  description: string;
-  author: string;
-  price: number;
-  pictureUrl: string;
-  city: string;
-  createdAt: Date;
-  category: {
-    id: number;
-    label: string;
-  };
-  tags: {
-    id: number;
-    label: string;
-  }[];
-}
+import {
+  GetAllAdsDocument,
+  useDeleteAdMutation,
+  useGetOneAdQuery,
+} from "../../generated/graphql-types";
 
 const AdDetails = () => {
   const { id } = useParams();
-  const [adData, setAdData] = useState<AdDetailsType | null>(null);
   const navigate = useNavigate();
 
-  const fetchAd = async () => {
-    try {
-      const result = await axios.get(
-        `${import.meta.env.VITE_API_URL}/ads/${id}`
-      );
-      setAdData(result.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  let adId: number;
+  if (!id || isNaN(Number(id))) {
+    adId = 0;
+  } else {
+    adId = parseInt(id);
+  }
 
-  useEffect(() => {
-    fetchAd();
-  }, [id]);
+  const { data, loading, error } = useGetOneAdQuery({
+    variables: {
+      getOneAdId: adId,
+    },
+  });
+
+  const [deleteAdMutation] = useDeleteAdMutation({
+    refetchQueries: [
+      {
+        query: GetAllAdsDocument,
+      },
+    ],
+  });
 
   const deleteAd = async (id: number) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/ads/${id}`);
+      await deleteAdMutation({
+        variables: {
+          deleteAdId: id,
+        },
+      });
       toast.success("Annonce supprimée avec succès!");
       navigate("/");
     } catch (error) {
@@ -53,25 +46,28 @@ const AdDetails = () => {
     }
   };
 
-  if (!adData) {
-    return <p>Loading...</p>;
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Oups ! On a tout cassé</p>;
+  if (adId === 0) return <p>Erreur : l'ID de l'annonce est invalide.</p>;
+
   return (
     <>
-      <h2 className="ad-details-title">{adData.title}</h2>
+      <h2 className="ad-details-title">{data?.getOneAd.title}</h2>
       <section className="ad-details">
         <div className="ad-details-image-container">
           <img
             className="ad-details-image"
-            src={adData.pictureUrl}
-            alt={adData.title}
+            src={data?.getOneAd.pictureUrl}
+            alt={data?.getOneAd.title}
           />
         </div>
         <div className="ad-details-info">
-          <div className="ad-details-price">{adData.price}€</div>
-          <div className="ad-details-description">{adData.description}</div>
+          <div className="ad-details-price">{data?.getOneAd.price}€</div>
+          <div className="ad-details-description">
+            {data?.getOneAd.description}
+          </div>
           <div className="ad-tags">
-            {adData.tags.map((tag) => (
+            {data?.getOneAd.tags.map((tag) => (
               <div key={tag.id} className="tag">
                 {tag.label}
               </div>
@@ -79,9 +75,9 @@ const AdDetails = () => {
           </div>
           <hr className="separator" />
           <div className="ad-details-owner">
-            Annoncée publiée par <b>{adData.author}</b> le{" "}
-            {new Date(adData.createdAt).toLocaleDateString()} à{" "}
-            {new Date(adData.createdAt).toLocaleTimeString()}
+            Annoncée publiée par <b>{data?.getOneAd.author}</b> le{" "}
+            {new Date(data?.getOneAd.createdAt).toLocaleDateString()} à{" "}
+            {new Date(data?.getOneAd.createdAt).toLocaleTimeString()}
           </div>
           <a
             href="mailto:serge@serge.com"
@@ -104,11 +100,11 @@ const AdDetails = () => {
           </a>
           <button
             className="button"
-            onClick={() => navigate(`/ad/${adData.id}/edit`)}
+            onClick={() => navigate(`/ad/${data?.getOneAd.id}/edit`)}
           >
             Modifier l'annonce
           </button>
-          <button className="button" onClick={() => deleteAd(adData.id)}>
+          <button className="button" onClick={() => deleteAd(adId)}>
             Supprimer l'annonce
           </button>
         </div>

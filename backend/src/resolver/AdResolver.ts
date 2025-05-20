@@ -155,8 +155,11 @@ export class AdResolver {
         throw new Error("Ad not found");
       }
 
+      const adId = ad.id;
+
       await ad.remove();
-      return ad.id;
+
+      return adId;
     } catch (err) {
       throw new Error(`Error deleting ad: ${err}`);
     }

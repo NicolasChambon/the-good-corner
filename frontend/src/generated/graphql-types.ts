@@ -138,10 +138,29 @@ export type GetAllAdsQueryVariables = Exact<{
 
 export type GetAllAdsQuery = { __typename?: 'Query', getAllAds: Array<{ __typename?: 'Ad', id: string, title: string, price: number, pictureUrl: string }> };
 
+export type GetOneAdQueryVariables = Exact<{
+  getOneAdId: Scalars['Float']['input'];
+}>;
+
+
+export type GetOneAdQuery = { __typename?: 'Query', getOneAd: { __typename?: 'Ad', id: string, title: string, description: string, author: string, price: number, pictureUrl: string, city: string, createdAt: any, category: { __typename?: 'Category', label: string }, tags: Array<{ __typename?: 'Tag', id: string, label: string }> } };
+
+export type DeleteAdMutationVariables = Exact<{
+  deleteAdId: Scalars['Float']['input'];
+}>;
+
+
+export type DeleteAdMutation = { __typename?: 'Mutation', deleteAd: string };
+
 export type GetAllCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllCategoriesQuery = { __typename?: 'Query', getAllCategories: Array<{ __typename?: 'Category', id: number, label: string }> };
+
+export type GetAllTagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllTagsQuery = { __typename?: 'Query', getAllTags: Array<{ __typename?: 'Tag', id: string, label: string }> };
 
 
 export const GetAllAdsDocument = gql`
@@ -188,6 +207,91 @@ export type GetAllAdsQueryHookResult = ReturnType<typeof useGetAllAdsQuery>;
 export type GetAllAdsLazyQueryHookResult = ReturnType<typeof useGetAllAdsLazyQuery>;
 export type GetAllAdsSuspenseQueryHookResult = ReturnType<typeof useGetAllAdsSuspenseQuery>;
 export type GetAllAdsQueryResult = Apollo.QueryResult<GetAllAdsQuery, GetAllAdsQueryVariables>;
+export const GetOneAdDocument = gql`
+    query GetOneAd($getOneAdId: Float!) {
+  getOneAd(id: $getOneAdId) {
+    id
+    title
+    description
+    author
+    price
+    pictureUrl
+    city
+    createdAt
+    category {
+      label
+    }
+    tags {
+      id
+      label
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetOneAdQuery__
+ *
+ * To run a query within a React component, call `useGetOneAdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneAdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneAdQuery({
+ *   variables: {
+ *      getOneAdId: // value for 'getOneAdId'
+ *   },
+ * });
+ */
+export function useGetOneAdQuery(baseOptions: Apollo.QueryHookOptions<GetOneAdQuery, GetOneAdQueryVariables> & ({ variables: GetOneAdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneAdQuery, GetOneAdQueryVariables>(GetOneAdDocument, options);
+      }
+export function useGetOneAdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneAdQuery, GetOneAdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneAdQuery, GetOneAdQueryVariables>(GetOneAdDocument, options);
+        }
+export function useGetOneAdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOneAdQuery, GetOneAdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOneAdQuery, GetOneAdQueryVariables>(GetOneAdDocument, options);
+        }
+export type GetOneAdQueryHookResult = ReturnType<typeof useGetOneAdQuery>;
+export type GetOneAdLazyQueryHookResult = ReturnType<typeof useGetOneAdLazyQuery>;
+export type GetOneAdSuspenseQueryHookResult = ReturnType<typeof useGetOneAdSuspenseQuery>;
+export type GetOneAdQueryResult = Apollo.QueryResult<GetOneAdQuery, GetOneAdQueryVariables>;
+export const DeleteAdDocument = gql`
+    mutation DeleteAd($deleteAdId: Float!) {
+  deleteAd(id: $deleteAdId)
+}
+    `;
+export type DeleteAdMutationFn = Apollo.MutationFunction<DeleteAdMutation, DeleteAdMutationVariables>;
+
+/**
+ * __useDeleteAdMutation__
+ *
+ * To run a mutation, you first call `useDeleteAdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAdMutation, { data, loading, error }] = useDeleteAdMutation({
+ *   variables: {
+ *      deleteAdId: // value for 'deleteAdId'
+ *   },
+ * });
+ */
+export function useDeleteAdMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAdMutation, DeleteAdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAdMutation, DeleteAdMutationVariables>(DeleteAdDocument, options);
+      }
+export type DeleteAdMutationHookResult = ReturnType<typeof useDeleteAdMutation>;
+export type DeleteAdMutationResult = Apollo.MutationResult<DeleteAdMutation>;
+export type DeleteAdMutationOptions = Apollo.BaseMutationOptions<DeleteAdMutation, DeleteAdMutationVariables>;
 export const GetAllCategoriesDocument = gql`
     query GetAllCategories {
   getAllCategories {
@@ -228,3 +332,43 @@ export type GetAllCategoriesQueryHookResult = ReturnType<typeof useGetAllCategor
 export type GetAllCategoriesLazyQueryHookResult = ReturnType<typeof useGetAllCategoriesLazyQuery>;
 export type GetAllCategoriesSuspenseQueryHookResult = ReturnType<typeof useGetAllCategoriesSuspenseQuery>;
 export type GetAllCategoriesQueryResult = Apollo.QueryResult<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>;
+export const GetAllTagsDocument = gql`
+    query GetAllTags {
+  getAllTags {
+    id
+    label
+  }
+}
+    `;
+
+/**
+ * __useGetAllTagsQuery__
+ *
+ * To run a query within a React component, call `useGetAllTagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllTagsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllTagsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllTagsQuery, GetAllTagsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllTagsQuery, GetAllTagsQueryVariables>(GetAllTagsDocument, options);
+      }
+export function useGetAllTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllTagsQuery, GetAllTagsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllTagsQuery, GetAllTagsQueryVariables>(GetAllTagsDocument, options);
+        }
+export function useGetAllTagsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllTagsQuery, GetAllTagsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllTagsQuery, GetAllTagsQueryVariables>(GetAllTagsDocument, options);
+        }
+export type GetAllTagsQueryHookResult = ReturnType<typeof useGetAllTagsQuery>;
+export type GetAllTagsLazyQueryHookResult = ReturnType<typeof useGetAllTagsLazyQuery>;
+export type GetAllTagsSuspenseQueryHookResult = ReturnType<typeof useGetAllTagsSuspenseQuery>;
+export type GetAllTagsQueryResult = Apollo.QueryResult<GetAllTagsQuery, GetAllTagsQueryVariables>;

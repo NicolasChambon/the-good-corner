@@ -1,0 +1,110 @@
+$bo-primary-color: #3498db;
+$bo-secondary-color: #ecf0f1;
+$bo-border-color: #bdc3c7;
+$bo-text-color: #2c3e50;
+$bo-danger-color: #e74c3c;
+$bo-success-color: #0ba800;
+$bo-spacing-unit: 1rem;
+$bo-border-radius: 4px;
+
+.BackOffice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $bo-spacing-unit * 2;
+  padding: $bo-spacing-unit * 1.5;
+  max-width: 1400px;
+  margin: $bo-spacing-unit auto;
+
+  .CategoryBo,
+  .TagBo {
+    flex: 1 1 400px;
+    min-width: 300px;
+    background-color: #fff;
+    padding: $bo-spacing-unit * 1.5;
+    border-radius: $bo-border-radius * 2;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid darken($bo-secondary-color, 5%);
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: $bo-spacing-unit * 1.5;
+      color: $bo-primary-color;
+      font-weight: 600;
+      border-bottom: 1px solid $bo-secondary-color;
+      padding-bottom: $bo-spacing-unit / 1.5;
+    }
+
+    &-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 $bo-spacing-unit * 1.5 0;
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid $bo-secondary-color;
+      border-radius: $bo-border-radius;
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: ($bo-spacing-unit * 0.75) ($bo-spacing-unit);
+        border-bottom: 1px solid $bo-secondary-color;
+        transition: background-color 0.15s ease-in-out;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:hover {
+          background-color: lighten($bo-secondary-color, 2%);
+        }
+
+        p {
+          margin: 0;
+          color: $bo-text-color;
+          flex-grow: 1;
+          margin-right: $bo-spacing-unit;
+          font-size: 0.95em;
+        }
+
+        .button {
+          background-color: transparent;
+          color: $bo-danger-color;
+          border: 1px solid $bo-danger-color;
+          padding: ($bo-spacing-unit / 3) ($bo-spacing-unit / 1.5);
+          border-radius: $bo-border-radius;
+          cursor: pointer;
+          font-size: 0.8em;
+          transition: background-color 0.2s ease, color 0.2s ease;
+          line-height: 1;
+
+          &:hover {
+            background-color: $bo-danger-color;
+            color: white;
+          }
+        }
+      }
+    }
+
+    form {
+      display: flex;
+      gap: $bo-spacing-unit * 0.75;
+      margin-top: $bo-spacing-unit;
+
+      .text-field {
+        flex-grow: 1;
+      }
+
+      .button {
+        background-color: $bo-success-color;
+        color: white;
+        border-color: $bo-success-color;
+
+        &:hover {
+          background-color: darken($bo-success-color, 10%);
+          border-color: darken($bo-success-color, 10%);
+        }
+      }
+    }
+  }
+}

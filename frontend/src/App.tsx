@@ -5,7 +5,7 @@ import About from "./pages/About";
 import AdDetails from "./pages/AdDetails/AdDetails";
 import "./App.css";
 import NewAdForm from "./pages/NewAdForm/NewAdForm";
-import CategoryBo from "./pages/CategoryBo/CategoryBo";
+import BackOffice from "./pages/BackOffice/BackOffice";
 import { ToastContainer } from "react-toastify";
 import SearchResult from "./pages/SearchResult/SearchResult";
 
@@ -18,7 +18,7 @@ function App() {
           <Route path="ad/:id" element={<AdDetails />} />
           <Route path="about" element={<About />} />
           <Route path="ad/new" element={<NewAdForm type="new" />} />
-          <Route path="category" element={<CategoryBo />} />
+          <Route path="backoffice" element={<BackOffice />} />
           <Route path="search" element={<SearchResult />} />
           <Route path="ad/:id/edit" element={<NewAdForm type="edit" />} />
         </Route>
