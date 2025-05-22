@@ -7,7 +7,8 @@ COPY *.json .
 COPY codegen.ts .
 COPY index.html .
 COPY vite.config.ts .
+COPY .env .
 
 RUN npm i
 
-CMD npm run start
+CMD npm run dev

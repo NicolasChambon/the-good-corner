@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Category } from "../../../interfaces/entities";
+import { Category } from "../../interfaces/entities";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import "./BackOffice.scss";
@@ -7,6 +7,7 @@ import {
   useGetAllCategoriesQuery,
   useGetAllTagsQuery,
 } from "../../generated/graphql-types";
+import axios from "axios";
 
 type Input = {
   label: string;

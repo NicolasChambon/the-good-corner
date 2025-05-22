@@ -5,8 +5,10 @@ import { AdResolver } from "./resolver/AdResolver";
 import { CategoryResolver } from "./resolver/CategoryResolver";
 import { TagResolver } from "./resolver/TagResolver";
 import { buildSchema } from "type-graphql";
+import * as dotenv from "dotenv";
+dotenv.config();
 
-const port = 4000;
+const port = process.env.API_PORT || 3000;
 
 const startServer = async () => {
   try {
