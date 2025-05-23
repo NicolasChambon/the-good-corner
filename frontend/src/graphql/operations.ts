@@ -33,6 +33,12 @@ export const GET_ONE_AD = gql`
   }
 `;
 
+export const CREATE_AD = gql`
+  mutation CreateAd($data: CreateAdInput!) {
+    createAd(data: $data)
+  }
+`;
+
 export const DELETE_AD = gql`
   mutation DeleteAd($deleteAdId: Float!) {
     deleteAd(id: $deleteAdId)

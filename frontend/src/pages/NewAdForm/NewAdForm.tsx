@@ -1,94 +1,88 @@
 import { useEffect, useState } from "react";
 import { Category } from "../../interfaces/entities";
 import { Tag } from "../../interfaces/entities";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "./NewAdForm.scss";
+import {
+  useCreateAdMutation,
+  useGetAllCategoriesQuery,
+  useGetAllTagsQuery,
+} from "../../generated/graphql-types";
+import { useNavigate } from "react-router";
 
 type Inputs = {
   title: string;
   description: string;
   author: string;
-  price: number;
+  price: string;
   pictureUrl: string;
   city: string;
-  category: Category;
-  tags: Tag[];
+  category: string;
+  tags: string[];
 };
 
 const NewAdForm = ({ type }: { type: "new" | "edit" }) => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
-  const [currentAd, setCurrentAd] = useState<Inputs | null>(null);
+  // const [currentAd, setCurrentAd] = useState<Inputs | null>(null); // TODO update
+
+  const [adInputs, setAdInputs] = useState<Inputs>({
+    title: "",
+    description: "",
+    author: "",
+    price: "",
+    pictureUrl: "",
+    city: "",
+    category: "",
+    tags: [],
+  });
+
+  const { data: dataCategories } = useGetAllCategoriesQuery();
+  useEffect(() => {
+    if (dataCategories) {
+      setCategories(dataCategories.getAllCategories);
+    }
+  }, [dataCategories]);
+
+  const { data: dataTags } = useGetAllTagsQuery();
+  useEffect(() => {
+    if (dataTags) {
+      setTags(dataTags.getAllTags);
+    }
+  }, [dataTags]);
 
   let adId: string | undefined;
   if (type === "edit") {
     adId = window.location.pathname.split("/")[2];
   }
 
-  const fetchCurrentAd = async (id: number) => {
+  // const fetchCurrentAd = async () => {}; // TODO update
+
+  const [createAd] = useCreateAdMutation();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("adInputs", adInputs);
     try {
-      const response = await axios.get<Inputs>(
-        `${import.meta.env.VITE_API_URL}/ads/${id}`
-      );
-      setCurrentAd(response.data);
+      await createAd({
+        variables: {
+          data: {
+            title: adInputs.title,
+            description: adInputs.description,
+            author: adInputs.author,
+            price: parseFloat(adInputs.price),
+            pictureUrl: adInputs.pictureUrl,
+            city: adInputs.city,
+            category: adInputs.category,
+            tags: adInputs.tags.map((tag) => tag.toString()),
+          },
+        },
+      });
+      toast.success("Annonce créée avec succès");
+      navigate("/");
     } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const fetchTags = async () => {
-    try {
-      const response = await axios.get<Tag[]>(
-        `${import.meta.env.VITE_API_URL}/tags`
-      );
-      setTags(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get<Category[]>(
-        `${import.meta.env.VITE_API_URL}/categories`
-      );
-      setCategories(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-    fetchTags();
-    if (type === "edit") {
-      fetchCurrentAd(Number(adId));
-    }
-  }, []);
-
-  const { register, handleSubmit } = useForm<Inputs>();
-
-  const onSubmit = async (data: Inputs) => {
-    const dataWithTags = {
-      ...data,
-      tags: data.tags.map((tagId) => ({ id: tagId })),
-    };
-    try {
-      if (type === "edit") {
-        await axios.put(
-          `${import.meta.env.VITE_API_URL}/ads/${adId}`,
-          dataWithTags
-        );
-        toast.success("Annonce modifiée avec succès!");
-        return;
-      }
-
-      await axios.post(`${import.meta.env.VITE_API_URL}/ads`, dataWithTags);
-      toast.success("Annonce créée avec succès!");
-    } catch (error) {
-      console.error(error);
-      toast.error("Une erreur est survenue lors de la création de l'annonce");
+      console.error("Error creating ad:", error);
+      toast.error("Erreur lors de la création de l'annonce");
     }
   };
 
@@ -100,57 +94,69 @@ const NewAdForm = ({ type }: { type: "new" | "edit" }) => {
           : "Création d'une nouvelle annonce"}
       </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit}>
         <input
-          defaultValue={currentAd?.title}
+          // defaultValue={currentAd?.title} // TODO update
           className="text-field"
           type="text"
           placeholder="Titre de l'anonce"
-          {...register("title")}
+          value={adInputs.title}
+          onChange={(e) => setAdInputs({ ...adInputs, title: e.target.value })}
         />
         <input
-          defaultValue={currentAd?.description}
+          // defaultValue={currentAd?.description} // TODO update
           className="text-field"
           type="text"
           placeholder="Description"
-          {...register("description")}
+          value={adInputs.description}
+          onChange={(e) =>
+            setAdInputs({ ...adInputs, description: e.target.value })
+          }
         />
         <input
-          defaultValue={currentAd?.author}
+          // defaultValue={currentAd?.author} // TODO update
           className="text-field"
           type="text"
           placeholder="Auteur"
-          {...register("author")}
+          value={adInputs.author}
+          onChange={(e) => setAdInputs({ ...adInputs, author: e.target.value })}
         />
         <input
-          defaultValue={currentAd?.price}
+          // defaultValue={currentAd?.price} // TODO update
           className="text-field"
           type="number"
           placeholder="Prix"
-          {...register("price")}
+          value={adInputs.price}
+          onChange={(e) => setAdInputs({ ...adInputs, price: e.target.value })}
         />
         <input
-          defaultValue={currentAd?.pictureUrl}
+          // defaultValue={currentAd?.pictureUrl} // TODO update
           className="text-field"
           type="text"
           placeholder="Lien vers une image"
-          {...register("pictureUrl")}
+          value={adInputs.pictureUrl}
+          onChange={(e) =>
+            setAdInputs({ ...adInputs, pictureUrl: e.target.value })
+          }
         />
         <input
-          defaultValue={currentAd?.city}
+          // defaultValue={currentAd?.city} // TODO update
           className="text-field"
           type="text"
           placeholder="Ville"
-          {...register("city")}
+          value={adInputs.city}
+          onChange={(e) => setAdInputs({ ...adInputs, city: e.target.value })}
         />
 
-        <select {...register("category")} className="text-field">
+        <select
+          className="text-field"
+          value={adInputs.category}
+          onChange={(e) =>
+            setAdInputs({ ...adInputs, category: e.target.value })
+          }
+        >
           {categories.map((category) => (
-            <option
-              key={category.id}
-              value={category.id}
-              selected={currentAd?.category.id === category.id}
-            >
+            <option key={category.id} value={category.id}>
               {category.label}
             </option>
           ))}
@@ -166,10 +172,19 @@ const NewAdForm = ({ type }: { type: "new" | "edit" }) => {
             <input
               type="checkbox"
               value={tag.id}
-              defaultChecked={currentAd?.tags
-                .map((tag) => tag.id)
-                .includes(tag.id)}
-              {...register(`tags`)}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setAdInputs({
+                    ...adInputs,
+                    tags: [...adInputs.tags, tag.id.toString()],
+                  });
+                } else {
+                  setAdInputs({
+                    ...adInputs,
+                    tags: adInputs.tags.filter((t) => t !== tag.id.toString()),
+                  });
+                }
+              }}
             />
             {tag.label}
           </label>
