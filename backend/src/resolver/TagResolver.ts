@@ -1,4 +1,4 @@
-import { Query, Resolver, Arg, Mutation } from "type-graphql";
+import { Query, Resolver, Arg, Mutation, ID } from "type-graphql";
 import { Tag } from "../entities/Tag";
 import { Field, InputType } from "type-graphql";
 
@@ -37,6 +37,24 @@ export class TagResolver {
       return tag;
     } catch (err) {
       throw new Error(`Error creating tag: ${err}`);
+    }
+  }
+
+  @Mutation(() => ID)
+  async deleteTag(@Arg("id") id: number): Promise<number> {
+    try {
+      const tag = await Tag.findOneBy({
+        id,
+      });
+
+      if (!tag) {
+        throw new Error("Tag not found");
+      }
+
+      await Tag.delete({ id });
+      return id;
+    } catch (err) {
+      throw new Error(`Error deleting tag: ${err}`);
     }
   }
 }

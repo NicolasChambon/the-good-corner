@@ -50,7 +50,7 @@ const Header = () => {
             </svg>
           </button>
         </form>
-        <Link to="/category" className="button link-button">
+        <Link to="/backoffice" className="button link-button">
           <span className="mobile-short-label">BackOffice</span>
           <span className="desktop-long-label">BackOffice</span>
         </Link>

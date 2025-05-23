@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Category } from "../../interfaces/entities";
 import { Tag } from "../../interfaces/entities";
 import axios from "axios";
-import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "./NewAdForm.scss";
 

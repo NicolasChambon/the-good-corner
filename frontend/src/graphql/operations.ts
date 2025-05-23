@@ -48,11 +48,41 @@ export const GET_ALL_CATEGORIES = gql`
   }
 `;
 
+export const CREATE_CATEGORY = gql`
+  mutation CreateCategory($data: CreateCategoryInput!) {
+    createCategory(data: $data) {
+      id
+      label
+    }
+  }
+`;
+
+export const DELETE_CATEGORY = gql`
+  mutation DeleteCategory($deleteCategoryId: Float!) {
+    deleteCategory(id: $deleteCategoryId)
+  }
+`;
+
 export const GET_ALL_TAGS = gql`
   query GetAllTags {
     getAllTags {
       id
       label
     }
+  }
+`;
+
+export const CREATE_TAG = gql`
+  mutation CreateTag($data: CreateTagInput!) {
+    createTag(data: $data) {
+      id
+      label
+    }
+  }
+`;
+
+export const DELETE_TAG = gql`
+  mutation DeleteTag($deleteTagId: Float!) {
+    deleteTag(id: $deleteTagId)
   }
 `;

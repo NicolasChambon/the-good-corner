@@ -5,7 +5,7 @@ services:
       - "5174:5173"
     volumes:
       - ./frontend/src/:/app/src
-      - ./frontend/codegen/:/app/codegen
+      - ./frontend/codegen.ts/:/app/codegen.ts
       - ./frontend/.env:/app/.env
     depends_on:
       backend:

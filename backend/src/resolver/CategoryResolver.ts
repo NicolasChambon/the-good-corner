@@ -1,4 +1,4 @@
-import { Query, Resolver, Arg, Mutation } from "type-graphql";
+import { Query, Resolver, Arg, Mutation, ID } from "type-graphql";
 import { Category } from "../entities/Category";
 import { Field, InputType } from "type-graphql";
 
@@ -36,6 +36,22 @@ export class CategoryResolver {
       return category;
     } catch (err) {
       throw new Error(`Error creating category: ${err}`);
+    }
+  }
+
+  @Mutation(() => ID)
+  async deleteCategory(@Arg("id") id: number): Promise<number> {
+    try {
+      const category = await Category.findOneBy({ id });
+
+      if (!category) {
+        throw new Error("Category not found");
+      }
+
+      await Category.delete({ id });
+      return id;
+    } catch (err) {
+      throw new Error(`Error deleting category: ${err}`);
     }
   }
 }

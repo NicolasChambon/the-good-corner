@@ -6,13 +6,13 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Ad } from "./Ad";
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ObjectType } from "type-graphql";
 
 @Entity()
 @ObjectType()
 export class Tag extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field(() => ID)
+  @Field()
   id!: number;
 
   @Column({ unique: true })
