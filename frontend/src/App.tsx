@@ -7,7 +7,6 @@ import "./App.css";
 import NewAdForm from "./pages/NewAdForm/NewAdForm";
 import BackOffice from "./pages/BackOffice/BackOffice";
 import { ToastContainer } from "react-toastify";
-import SearchResult from "./pages/SearchResult/SearchResult";
 
 function App() {
   return (
@@ -19,7 +18,6 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="ad/new" element={<NewAdForm type="new" />} />
           <Route path="backoffice" element={<BackOffice />} />
-          <Route path="search" element={<SearchResult />} />
           <Route path="ad/:id/edit" element={<NewAdForm type="edit" />} />
         </Route>
       </Routes>

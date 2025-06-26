@@ -6,13 +6,14 @@ import { useSearchParams } from "react-router";
 const RecentsAds = () => {
   const [searchParams] = useSearchParams();
   const categoryId = searchParams.get("category");
+  const searchQuery = searchParams.get("search");
 
   const [total, setTotal] = useState(0);
 
   const { data, loading, error } = useGetAllAdsQuery({
     variables: {
       category: categoryId ? parseInt(categoryId) : undefined,
-      search: undefined,
+      search: searchQuery ? searchQuery : undefined,
     },
   });
 

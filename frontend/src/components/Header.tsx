@@ -24,7 +24,7 @@ const Header = () => {
           className="text-field-with-button"
           onSubmit={(e) => {
             e.preventDefault();
-            window.location.href = `/search?query=${searchInput}`;
+            window.location.href = `/?search=${searchInput}`;
           }}
         >
           <input
