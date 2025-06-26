@@ -18,6 +18,7 @@ const SearchResult = () => {
 
   if (loading) return <p>Ça charge !</p>;
   if (error) return <p>Oups ! On a tout cassé</p>;
+
   return (
     <>
       <h2>Résultat de recherche</h2>

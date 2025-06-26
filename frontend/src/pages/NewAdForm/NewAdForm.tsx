@@ -62,7 +62,6 @@ const NewAdForm = ({ type }: { type: "new" | "edit" }) => {
   const [createAd] = useCreateAdMutation();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("adInputs", adInputs);
     try {
       await createAd({
         variables: {
